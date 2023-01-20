@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<title></title>
+<style>
+@font-face {
+    font-family: 'CookieRunBold';
+    src: url('./fonts/CookieRunBold.otf') format('opentype');
+}
+html, body {
+    font-family: 'CookieRunBold';
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+
+.l-inner {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px 20px 40px 20px;
+    min-height: 100%;
+    background-color: burlywood;
+}
+
+.c-home {
+    cursor: pointer;
+    margin-bottom: 40px;
+}
+.c-home:hover,
+.c-home:active {
+    -webkit-text-stroke: 1px #fff;
+}
+
+.c-page__img {
+    display: block;
+    width: 100%;
+}
+
+.c-page__text {
+    white-space: pre-line;
+    padding: 20px 0 40px 0;
+}
+
+.c-choice {
+    margin: 10px;
+    cursor: pointer;
+    color: #473C33;
+}
+.c-choice:hover,
+.c-choice:active {
+    -webkit-text-stroke: 1px #fff;
+}
+</style>
+<script src="./Book.js"></script>
+<head>
+<body>
+
+<div class="l-inner">
+    <div class="c-home js-home">
+        <i class="fas fa-home"></i>
+        처음으로
+    </div>
+    <div class="js-book-wrap"></div>
+</div>
+
+<script>
+window.book = new Book();
+
+function loadJs(url) {
+    return new Promise(function (resolve) {
+        var el = document.createElement('script');
+        el.onload = function (url) {
+            resolve();
+        };
+        el.src = url;
+        document.head.appendChild(el);
+    });
+}
+
+function run() {
+    document.querySelector('.js-book-wrap').appendChild(window.book.element);
+
+    document.querySelector('.js-home').addEventListener('click', () => {
+        window.book.showPage(0);
+    });
+
+    window.book.showPage(0);
+}
+
+function init() {
+    const pageCount = 54;
+    const promiseList = [];
+    for (let i = 0; i < pageCount; i++) {
+        const num = i.toString().padStart(2, '0');
+        const path = `./pages/page${num}.js`;
+        promiseList.push(loadJs(path));
+    }
+
+    Promise.all(promiseList).then(values => {
+        run();
+    });
+}
+
+init();
+</script>
+
+</body>
+</html>
